@@ -21,7 +21,19 @@ public class Category
         Validate();
     }
 
-    public void Validate()
+    public void Activate()
+    {
+        IsActive = true;
+        Validate();
+    }
+
+    public void Deactivate()
+    {
+        IsActive = false;
+        Validate();
+    }
+
+    private void Validate()
     {
         if (String.IsNullOrWhiteSpace(Name))
         {
