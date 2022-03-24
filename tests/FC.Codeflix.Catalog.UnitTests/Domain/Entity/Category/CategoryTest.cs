@@ -118,9 +118,9 @@ public class CategoryTest
         }
     }
 
-    [Fact(DisplayName = nameof(InstantiateThrowErrorWhenNameIsGreaterThant255Characters))]
+    [Fact(DisplayName = nameof(InstantiateThrowErrorWhenNameIsGreaterThan255Characters))]
     [Trait("Domain", "Category - Aggregates")]
-    public void InstantiateThrowErrorWhenNameIsGreaterThant255Characters()
+    public void InstantiateThrowErrorWhenNameIsGreaterThan255Characters()
     {
         var validCategory = _categoryTestFixture.GetValidCategory();
 
@@ -128,12 +128,12 @@ public class CategoryTest
         Action action = () => new DomainEntity.Category(invalidName, validCategory.Description);
 
         action.Should().Throw<EntityValidationException>()
-            .WithMessage("Name should be less ou equal 255 characters long");
+            .WithMessage("Name should be less or equal 255 characters long");
     }
 
-    [Fact(DisplayName = nameof(InstantiateThrowErrorWhenDescriptionIsGreaterThant1000Characters))]
+    [Fact(DisplayName = nameof(InstantiateThrowErrorWhenDescriptionIsGreaterThant10000Characters))]
     [Trait("Domain", "Category - Aggregates")]
-    public void InstantiateThrowErrorWhenDescriptionIsGreaterThant1000Characters()
+    public void InstantiateThrowErrorWhenDescriptionIsGreaterThant10000Characters()
     {
         var validCategory = _categoryTestFixture.GetValidCategory();
 
@@ -141,7 +141,7 @@ public class CategoryTest
         Action action = () => new DomainEntity.Category(validCategory.Name, invalidDescription);
 
         action.Should().Throw<EntityValidationException>()
-            .WithMessage("Description should be less ou equal 10.000 characters long");
+            .WithMessage("Description should be less or equal 10000 characters long");
     }
 
     [Fact(DisplayName = nameof(Activate))]
@@ -237,7 +237,7 @@ public class CategoryTest
         Action action = () => category.Update(invalidName, "category ok description");
 
         action.Should().Throw<EntityValidationException>()
-            .WithMessage("Name should be less ou equal 255 characters long");
+            .WithMessage("Name should be less or equal 255 characters long");
     }
 
     [Fact(DisplayName = nameof(UpdateErrorWhenDescriptionIsGreaterThan10000Characters))]
@@ -252,6 +252,6 @@ public class CategoryTest
 
         Action action = () => category.Update("category ok name", invalidDescription);
         action.Should().Throw<EntityValidationException>()
-            .WithMessage("Description should be less ou equal 10.000 characters long");
+            .WithMessage("Description should be less or equal 10000 characters long");
     }
 }
