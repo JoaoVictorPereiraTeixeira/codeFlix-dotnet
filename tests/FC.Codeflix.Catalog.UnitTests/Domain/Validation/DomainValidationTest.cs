@@ -126,6 +126,7 @@ public class DomainValidationTest
 
     public static IEnumerable<object[]> GetValuesGreaterThanMax(int numberOfTests = 5)
     {
+        yield return new object[] { "123456", 5 };
         var faker = new Faker();
         for (int i = 0; i < numberOfTests; i++)
         {
@@ -135,6 +136,15 @@ public class DomainValidationTest
         }
     }
 
+    public static IEnumerable<object[]> GetValuesLessThanMax(int numberOfTests = 5)
+    {
+        yield return new object[] { "123456", 6 };
+        var faker = new Faker();
+        for (int i = 0; i < (numberOfTests - 1); i++)
+        {
+            var example = faker.Commerce.ProductName();
+            var maxLength = example.Length + (new Random()).Next(0, 5);
+            yield return new object[] { example, maxLength };
         }
     }
 }
