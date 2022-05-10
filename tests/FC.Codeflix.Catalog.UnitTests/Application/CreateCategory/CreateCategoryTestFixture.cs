@@ -67,7 +67,6 @@ public class CreateCategoryTestFixture : BaseFixture
         return invalidInputDescriptionNull;
     }
 
-
     public Mock<ICategoryRepository> GetRepositoryMock => new();
     public Mock<IUnitOfWork> GetUnitOfWorkMock => new();
 
