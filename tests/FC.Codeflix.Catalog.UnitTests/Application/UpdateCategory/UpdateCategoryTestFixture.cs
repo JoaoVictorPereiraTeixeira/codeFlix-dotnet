@@ -1,4 +1,5 @@
 ﻿using FC.Codeflix.Catalog.Application.Interfaces;
+using FC.Codeflix.Catalog.Application.UseCases.Category.UpdateCategory;
 using FC.Codeflix.Catalog.Domain.Entity;
 using FC.Codeflix.Catalog.Domain.Repository;
 using Moq;
@@ -36,7 +37,12 @@ public class UpdateCategoryTestFixture : BaseFixture
 
     public bool GetRandomBoolean() => (new Random()).NextDouble() < 0.5;
 
-
+    public UpdateCategoryInput GetValidInput(Guid? id = null) => new(
+        id ?? Guid.NewGuid(),
+        GetValidCategoryName(),
+        GetValidCategoryDescription(),
+        GetRandomBoolean()
+    );
 
     public Mock<ICategoryRepository> GetRepositoryMock => new();
     public Mock<IUnitOfWork> GetUnitOfWorkMock => new();

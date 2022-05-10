@@ -12,13 +12,7 @@ public class UpdateCategoryTestDataGenerator
         for(int i = 0; i < times; i++)
         {
             var categoryExample = fixture.GetExampleCategory();
-            var inputExample = new UpdateCategoryInput(
-                categoryExample.Id,
-                fixture.GetValidCategoryName(),
-                fixture.GetValidCategoryDescription(),
-                fixture.GetRandomBoolean()
-            );
-
+            var inputExample = fixture.GetValidInput(categoryExample.Id);
             yield return new object[] { categoryExample, inputExample };
         }
     }
