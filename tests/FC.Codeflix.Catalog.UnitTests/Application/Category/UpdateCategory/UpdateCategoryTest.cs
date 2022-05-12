@@ -1,9 +1,8 @@
 ﻿using FC.Codeflix.Catalog.Application.Exceptions;
 using FC.Codeflix.Catalog.Application.UseCases.Category.Common;
 using FC.Codeflix.Catalog.Application.UseCases.Category.UpdateCategory;
-using FC.Codeflix.Catalog.Domain.Entity;
+using Entity = FC.Codeflix.Catalog.Domain.Entity;
 using FC.Codeflix.Catalog.Domain.Exceptions;
-using FC.Codeflix.Catalog.UnitTests.Application.DeleteCategory;
 using FluentAssertions;
 using Moq;
 using System;
@@ -11,7 +10,7 @@ using System.Threading;
 using Xunit;
 using UseCase = FC.Codeflix.Catalog.Application.UseCases.Category.UpdateCategory;
 
-namespace FC.Codeflix.Catalog.UnitTests.Application.UpdateCategory;
+namespace FC.Codeflix.Catalog.UnitTests.Application.Category.UpdateCategory;
 
 [Collection(nameof(UpdateCategoryTestFixture))]
 public class UpdateCategoryTest
@@ -20,17 +19,17 @@ public class UpdateCategoryTest
 
     public UpdateCategoryTest(UpdateCategoryTestFixture fixture)
     {
-        this._fixture = fixture;
+        _fixture = fixture;
     }
 
     [Theory(DisplayName = nameof(UpdateCategory))]
     [Trait("Application", "UpdateCategory - Use Cases")]
     [MemberData(
         nameof(UpdateCategoryTestDataGenerator.GetCategoriesToUpdate),
-        parameters:10,
+        parameters: 10,
         MemberType = typeof(UpdateCategoryTestDataGenerator)
      )]
-    public async void UpdateCategory(Category categoryExample, UseCase.UpdateCategoryInput input)
+    public async void UpdateCategory(Entity.Category categoryExample, UpdateCategoryInput input)
     {
         var repositoryMock = _fixture.GetRepositoryMock;
         var unitOfWorkMock = _fixture.GetUnitOfWorkMock;
@@ -49,7 +48,7 @@ public class UpdateCategoryTest
         output.Should().NotBeNull();
         output.Name.Should().Be(input.Name);
         output.Description.Should().Be(input.Description);
-        output.IsActive.Should().Be((bool) input.IsActive);
+        output.IsActive.Should().Be((bool)input.IsActive);
 
         repositoryMock.Verify(repository => repository.Get(
             categoryExample.Id,
@@ -76,7 +75,7 @@ public class UpdateCategoryTest
         parameters: 10,
         MemberType = typeof(UpdateCategoryTestDataGenerator)
      )]
-    public async void UpdateCategoryWithoutProvidingIsActive(Category categoryExample, UpdateCategoryInput exampleInput)
+    public async void UpdateCategoryWithoutProvidingIsActive(Entity.Category categoryExample, UpdateCategoryInput exampleInput)
     {
         var input = new UpdateCategoryInput(
             exampleInput.Id,
@@ -101,7 +100,7 @@ public class UpdateCategoryTest
         output.Should().NotBeNull();
         output.Name.Should().Be(input.Name);
         output.Description.Should().Be(input.Description);
-        output.IsActive.Should().Be((bool) categoryExample.IsActive!);
+        output.IsActive.Should().Be((bool)categoryExample.IsActive!);
 
         repositoryMock.Verify(repository => repository.Get(
             categoryExample.Id,
@@ -128,7 +127,7 @@ public class UpdateCategoryTest
         parameters: 10,
         MemberType = typeof(UpdateCategoryTestDataGenerator)
      )]
-    public async void UpdateCategoryOnlyName(Category categoryExample, UpdateCategoryInput exampleInput)
+    public async void UpdateCategoryOnlyName(Entity.Category categoryExample, UpdateCategoryInput exampleInput)
     {
         var input = new UpdateCategoryInput(
             exampleInput.Id,
@@ -200,7 +199,7 @@ public class UpdateCategoryTest
         );
 
         repositoryMock.Verify(repository => repository.Update(
-            It.IsAny<Category>(),
+            It.IsAny<Entity.Category>(),
             It.IsAny<CancellationToken>()),
             Times.Never
         );

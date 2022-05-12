@@ -1,7 +1,7 @@
 ﻿using FC.Codeflix.Catalog.Application.UseCases.Category.ListCategories;
 using System.Collections.Generic;
 
-namespace FC.Codeflix.Catalog.UnitTests.Application.ListCategories;
+namespace FC.Codeflix.Catalog.UnitTests.Application.Category.ListCategories;
 public class ListCategoriesTestDataGenerator
 {
     public static IEnumerable<object[]> GetInputsWithoutAllParameters(int times = 15)
@@ -10,7 +10,7 @@ public class ListCategoriesTestDataGenerator
         var inputExample = fixture.GetExampleInput();
         for (int i = 0; i < times; i++)
         {
-            switch(i % 5)
+            switch (i % 5)
             {
                 case 0:
                     yield return new object[] { new ListCategoriesInput() };

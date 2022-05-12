@@ -3,7 +3,7 @@ using FluentAssertions;
 using System;
 using Xunit;
 
-namespace FC.Codeflix.Catalog.UnitTests.Application.UpdateCategory;
+namespace FC.Codeflix.Catalog.UnitTests.Application.Category.UpdateCategory;
 
 [Collection(nameof(UpdateCategoryTestFixture))]
 public class UpdateCategoryInputValidatorTest
@@ -12,7 +12,7 @@ public class UpdateCategoryInputValidatorTest
 
     public UpdateCategoryInputValidatorTest(UpdateCategoryTestFixture fixture)
     {
-        this._fixture = fixture;
+        _fixture = fixture;
     }
 
     [Fact(DisplayName = nameof(DontValidateWhenEmptyGuid))]
@@ -25,7 +25,7 @@ public class UpdateCategoryInputValidatorTest
         validateResult.Should().NotBeNull();
         validateResult.IsValid.Should().BeFalse();
         validateResult.Errors.Should().HaveCount(1);
-        validateResult.Errors[0].ErrorMessage.Should().Be("'Id' must not be empty.");      
+        validateResult.Errors[0].ErrorMessage.Should().Be("'Id' deve ser informado.");
     }
 
     [Fact(DisplayName = nameof(DontValidateWhenEmptyGuid))]

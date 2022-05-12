@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
-namespace FC.Codeflix.Catalog.UnitTests.Application.CreateCategory;
+namespace FC.Codeflix.Catalog.UnitTests.Application.Category.CreateCategory;
 public class CreateCategoryTestDataGenerator
 {
     public static IEnumerable<object[]> GetInvalidInputs(int times = 12)
@@ -13,9 +9,9 @@ public class CreateCategoryTestDataGenerator
         var invalidInputsList = new List<object[]>();
         var totalInvalidCases = 4;
 
-        for(int index = 0; index < times; index++)
+        for (int index = 0; index < times; index++)
         {
-            switch(index % totalInvalidCases)
+            switch (index % totalInvalidCases)
             {
                 case 0:
                     invalidInputsList.Add(new object[]
