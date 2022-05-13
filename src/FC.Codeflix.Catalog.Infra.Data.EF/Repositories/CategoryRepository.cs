@@ -20,10 +20,8 @@ namespace FC.Codeflix.Catalog.Infra.Data.EF.Repositories
             throw new NotImplementedException();
         }
 
-        public Task<Category> Get(Guid id, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
+        public async Task<Category> Get(Guid id, CancellationToken cancellationToken)
+            => await _categories.FindAsync(new object[] { id }, cancellationToken);
 
         public async Task Insert(Category aggregate, CancellationToken cancellationToken) 
             => await _categories.AddAsync(aggregate, cancellationToken);
