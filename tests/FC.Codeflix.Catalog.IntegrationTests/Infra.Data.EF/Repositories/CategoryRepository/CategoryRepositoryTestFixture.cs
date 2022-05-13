@@ -1,4 +1,5 @@
 ﻿using FC.Codeflix.Catalog.Domain.Entity;
+using FC.Codeflix.Catalog.Infra.Data.EF;
 using FC.Codeflix.Catalog.IntegrationTests.Base;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -37,11 +38,9 @@ public class CategoryRepositoryTestFixture : BaseFixture
     );
 
     public CodeflixCatalogDbContext CreateDbContext()
-    {
-        var dbContext = new CodeflixCatalogDbContext(
+        =>  new CodeflixCatalogDbContext(
             new DbContextOptionsBuilder<CodeflixCatalogDbContext>()
                 .UseInMemoryDatabase("integration-tests-db")
                 .Options
         );
-    }
 }
