@@ -37,9 +37,7 @@ namespace FC.Codeflix.Catalog.Infra.Data.EF.Repositories
             throw new NotImplementedException();
         }
 
-        public Task<Category> Update(Category aggregate, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
+        public Task Update(Category aggregate, CancellationToken cancellationToken)
+            => Task.FromResult(_categories.Update(aggregate));
     }
 }
