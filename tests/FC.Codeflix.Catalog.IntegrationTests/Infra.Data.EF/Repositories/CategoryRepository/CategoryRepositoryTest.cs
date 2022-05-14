@@ -12,7 +12,7 @@ using Repository = FC.Codeflix.Catalog.Infra.Data.EF.Repositories;
 namespace FC.Codeflix.Catalog.IntegrationTests.Infra.Data.EF.Repositories.CategoryRepository;
 
 [Collection(nameof(CategoryRepositoryTestFixture))]
-public class CategoryRepositoryTest
+public class CategoryRepositoryTest : IDisposable
 {
     private readonly CategoryRepositoryTestFixture _fixture;
 
@@ -32,9 +32,9 @@ public class CategoryRepositoryTest
         await categoryRepository.Insert(exampleCategory, CancellationToken.None);
         await dbContext.SaveChangesAsync(CancellationToken.None);
 
-        var dbCategory = await (_fixture.CreateDbContext(true)).Categories.FindAsync(exampleCategory.Id);
+        var dbCategory = await (_fixture.CreateDbContext()).Categories.FindAsync(exampleCategory.Id);
         dbCategory.Should().NotBeNull();
-        dbCategory.Name.Should().Be(exampleCategory.Name);
+        dbCategory!.Name.Should().Be(exampleCategory.Name);
         dbCategory.Description.Should().Be(exampleCategory.Description);
         dbCategory.IsActive.Should().Be(exampleCategory.IsActive);
         dbCategory.CreatedAt.Should().Be(exampleCategory.CreatedAt);
@@ -50,7 +50,7 @@ public class CategoryRepositoryTest
         exampleCategoriesList.Add(exampleCategory);
         await dbContext.AddRangeAsync(exampleCategoriesList);
         await dbContext.SaveChangesAsync(CancellationToken.None);
-        var categoryRepository = new Repository.CategoryRepository((_fixture.CreateDbContext(true)));
+        var categoryRepository = new Repository.CategoryRepository((_fixture.CreateDbContext()));
 
         var dbCategory = await categoryRepository.Get(exampleCategory.Id,CancellationToken.None);
         dbCategory.Should().NotBeNull();
@@ -92,7 +92,7 @@ public class CategoryRepositoryTest
         await categoryRepository.Update(exampleCategory, CancellationToken.None);
         dbContext.SaveChanges();
 
-        var dbCategory = await (_fixture.CreateDbContext(true)).Categories.FindAsync(exampleCategory.Id);
+        var dbCategory = await (_fixture.CreateDbContext()).Categories.FindAsync(exampleCategory.Id);
         dbCategory.Should().NotBeNull();
         dbCategory!.Name.Should().Be(exampleCategory.Name);
         dbCategory.Id.Should().Be(exampleCategory.Id);
@@ -116,7 +116,7 @@ public class CategoryRepositoryTest
         await categoryRepository.Delete(exampleCategory, CancellationToken.None);
         dbContext.SaveChanges();
 
-        var dbCategory = await (_fixture.CreateDbContext(true)).Categories.FindAsync(exampleCategory.Id);
+        var dbCategory = await (_fixture.CreateDbContext()).Categories.FindAsync(exampleCategory.Id);
         dbCategory.Should().BeNull();
     }
 
@@ -144,11 +144,34 @@ public class CategoryRepositoryTest
         {
             var exampleItem = exampleCategoriesList.Find(category => category.Id == outputItem.Id);
             exampleItem.Should().NotBeNull();
-            outputItem!.Name.Should().Be(exampleItem.Name);
+            outputItem!.Name.Should().Be(exampleItem!.Name);
             outputItem.Id.Should().Be(exampleItem.Id);
             outputItem.Description.Should().Be(exampleItem.Description);
             outputItem.IsActive.Should().Be(exampleItem.IsActive);
             outputItem.CreatedAt.Should().Be(exampleItem.CreatedAt);
         }        
+    }
+
+    [Fact(DisplayName = nameof(SearchReturnsEmptyWhenPersistenceIsEmpty))]
+    [Trait("Integration/Infra.Data", "CategoryRepository - Repositories")]
+    public async Task SearchReturnsEmptyWhenPersistenceIsEmpty()
+    {
+        CodeflixCatalogDbContext dbContext = _fixture.CreateDbContext();
+        var categoryRepository = new Repository.CategoryRepository(dbContext);
+        var searchInput = new SearchInput(1, 20, "", "", SearchOrder.Asc);
+
+        var output = await categoryRepository.Search(searchInput, CancellationToken.None);
+
+        output.Should().NotBeNull();
+        output.Items.Should().NotBeNull();
+        output.CurrentPage.Should().Be(searchInput.Page);
+        output.PerPage.Should().Be(searchInput.PerPage);
+        output.Total.Should().Be(0);
+        output.Items.Should().HaveCount(0);
+    }
+
+    public void Dispose()
+    {
+        _fixture.CleanMemoryDatabase();
     }
 }

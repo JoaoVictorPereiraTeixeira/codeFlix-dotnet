@@ -43,7 +43,7 @@ public class CategoryRepositoryTestFixture : BaseFixture
         => Enumerable.Range(1,length).
         Select(_ => GetExampleCategory()).ToList();
 
-    public CodeflixCatalogDbContext CreateDbContext(bool preserveData = false)
+    public CodeflixCatalogDbContext CreateDbContext()
     {
         var context = new CodeflixCatalogDbContext(
             new DbContextOptionsBuilder<CodeflixCatalogDbContext>()
@@ -51,10 +51,9 @@ public class CategoryRepositoryTestFixture : BaseFixture
                 .Options
         );
 
-        if(preserveData == false)
-            context.Database.EnsureDeleted();
-
         return context;
 
     }
+
+    public void CleanMemoryDatabase() => CreateDbContext().Database.EnsureDeleted();
 }
