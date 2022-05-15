@@ -119,7 +119,7 @@ public class CreateCategoryTest
         var task = async () => await useCase.Handle(input, CancellationToken.None);
         await task.Should().ThrowAsync<EntityValidationException>()
             .WithMessage(exceptionMessage);
-
+            
         var dbCategoriesList = _fixture.CreateDbContext(true).Categories.AsNoTracking().ToList();
         dbCategoriesList.Should().HaveCount(0);
     }
