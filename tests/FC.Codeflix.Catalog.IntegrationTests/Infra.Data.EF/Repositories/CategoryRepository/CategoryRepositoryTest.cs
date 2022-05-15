@@ -13,7 +13,7 @@ using Repository = FC.Codeflix.Catalog.Infra.Data.EF.Repositories;
 namespace FC.Codeflix.Catalog.IntegrationTests.Infra.Data.EF.Repositories.CategoryRepository;
 
 [Collection(nameof(CategoryRepositoryTestFixture))]
-public class CategoryRepositoryTest : IDisposable
+public class CategoryRepositoryTest
 {
     private readonly CategoryRepositoryTestFixture _fixture;
 
@@ -26,14 +26,14 @@ public class CategoryRepositoryTest : IDisposable
     [Trait("Integration/Infra.Data", "CategoryRepository - Repositories")]
     public async Task Insert()
     {
-        CodeflixCatalogDbContext dbContext = _fixture.CreateDbContext();
+        CodeflixCatalogDbContext dbContext = _fixture.CreateDbContext( );
         var exampleCategory = _fixture.GetExampleCategory();
         var categoryRepository = new Repository.CategoryRepository(dbContext);
 
         await categoryRepository.Insert(exampleCategory, CancellationToken.None);
         await dbContext.SaveChangesAsync(CancellationToken.None);
 
-        var dbCategory = await (_fixture.CreateDbContext()).Categories.FindAsync(exampleCategory.Id);
+        var dbCategory = await (_fixture.CreateDbContext(true)).Categories.FindAsync(exampleCategory.Id);
         dbCategory.Should().NotBeNull();
         dbCategory!.Name.Should().Be(exampleCategory.Name);
         dbCategory.Description.Should().Be(exampleCategory.Description);
@@ -45,13 +45,13 @@ public class CategoryRepositoryTest : IDisposable
     [Trait("Integration/Infra.Data", "CategoryRepository - Repositories")]
     public async Task Get()
     {
-        CodeflixCatalogDbContext dbContext = _fixture.CreateDbContext();
+        CodeflixCatalogDbContext dbContext = _fixture.CreateDbContext( );
         var exampleCategory = _fixture.GetExampleCategory();
         var exampleCategoriesList = _fixture.GetExampleCategoriesList(15);
         exampleCategoriesList.Add(exampleCategory);
         await dbContext.AddRangeAsync(exampleCategoriesList);
         await dbContext.SaveChangesAsync(CancellationToken.None);
-        var categoryRepository = new Repository.CategoryRepository((_fixture.CreateDbContext()));
+        var categoryRepository = new Repository.CategoryRepository((_fixture.CreateDbContext(true)));
 
         var dbCategory = await categoryRepository.Get(exampleCategory.Id,CancellationToken.None);
         dbCategory.Should().NotBeNull();
@@ -66,7 +66,8 @@ public class CategoryRepositoryTest : IDisposable
     [Trait("Integration/Infra.Data", "CategoryRepository - Repositories")]
     public async Task GetThrowIfNotFound()
     {
-        CodeflixCatalogDbContext dbContext = _fixture.CreateDbContext();
+        
+        CodeflixCatalogDbContext dbContext = _fixture.CreateDbContext( );
         var exampleId = Guid.NewGuid();
         await dbContext.AddRangeAsync(_fixture.GetExampleCategoriesList(15));
         await dbContext.SaveChangesAsync(CancellationToken.None);
@@ -80,7 +81,7 @@ public class CategoryRepositoryTest : IDisposable
     [Trait("Integration/Infra.Data", "CategoryRepository - Repositories")]
     public async Task Update()
     {
-        CodeflixCatalogDbContext dbContext = _fixture.CreateDbContext();
+        CodeflixCatalogDbContext dbContext = _fixture.CreateDbContext( );
         var exampleCategory = _fixture.GetExampleCategory();
         var newCategoryValues = _fixture.GetExampleCategory();
         var exampleCategoriesList = _fixture.GetExampleCategoriesList(15);
@@ -93,7 +94,7 @@ public class CategoryRepositoryTest : IDisposable
         await categoryRepository.Update(exampleCategory, CancellationToken.None);
         dbContext.SaveChanges();
 
-        var dbCategory = await (_fixture.CreateDbContext()).Categories.FindAsync(exampleCategory.Id);
+        var dbCategory = await (_fixture.CreateDbContext(true)).Categories.FindAsync(exampleCategory.Id);
         dbCategory.Should().NotBeNull();
         dbCategory!.Name.Should().Be(exampleCategory.Name);
         dbCategory.Id.Should().Be(exampleCategory.Id);
@@ -117,7 +118,7 @@ public class CategoryRepositoryTest : IDisposable
         await categoryRepository.Delete(exampleCategory, CancellationToken.None);
         dbContext.SaveChanges();
 
-        var dbCategory = await (_fixture.CreateDbContext()).Categories.FindAsync(exampleCategory.Id);
+        var dbCategory = await (_fixture.CreateDbContext(true)).Categories.FindAsync(exampleCategory.Id);
         dbCategory.Should().BeNull();
     }
 
@@ -125,7 +126,7 @@ public class CategoryRepositoryTest : IDisposable
     [Trait("Integration/Infra.Data", "CategoryRepository - Repositories")]
     public async Task SearchReturnsListAndTotal()
     {
-        CodeflixCatalogDbContext dbContext = _fixture.CreateDbContext();
+        CodeflixCatalogDbContext dbContext = _fixture.CreateDbContext( );
         var exampleCategoriesList = _fixture.GetExampleCategoriesList(15);
         await dbContext.AddRangeAsync(exampleCategoriesList);
         await dbContext.SaveChangesAsync(CancellationToken.None);
@@ -157,7 +158,8 @@ public class CategoryRepositoryTest : IDisposable
     [Trait("Integration/Infra.Data", "CategoryRepository - Repositories")]
     public async Task SearchReturnsEmptyWhenPersistenceIsEmpty()
     {
-        CodeflixCatalogDbContext dbContext = _fixture.CreateDbContext();
+        
+        CodeflixCatalogDbContext dbContext = _fixture.CreateDbContext( );
         var categoryRepository = new Repository.CategoryRepository(dbContext);
         var searchInput = new SearchInput(1, 20, "", "", SearchOrder.Asc);
 
@@ -184,7 +186,7 @@ public class CategoryRepositoryTest : IDisposable
         int expectedQuantityItems
     )
     {
-        CodeflixCatalogDbContext dbContext = _fixture.CreateDbContext();
+        CodeflixCatalogDbContext dbContext = _fixture.CreateDbContext( );
         var exampleCategoriesList = _fixture.GetExampleCategoriesList(quantityCategoriesToGenerate);
         await dbContext.AddRangeAsync(exampleCategoriesList);
         await dbContext.SaveChangesAsync(CancellationToken.None);
@@ -230,7 +232,7 @@ public class CategoryRepositoryTest : IDisposable
         int expectedQuantityTotalItems
     )
     {
-        CodeflixCatalogDbContext dbContext = _fixture.CreateDbContext();
+        CodeflixCatalogDbContext dbContext = _fixture.CreateDbContext( );
         var exampleCategoriesList = _fixture.GetExampleCategoriesListWithNames(new List<string>()
         {
             "Action",
@@ -283,7 +285,7 @@ public class CategoryRepositoryTest : IDisposable
         string order
     )
     {
-        CodeflixCatalogDbContext dbContext = _fixture.CreateDbContext();
+        CodeflixCatalogDbContext dbContext = _fixture.CreateDbContext( );
         var exampleCategoriesList = _fixture.GetExampleCategoriesList(10);
         await dbContext.AddRangeAsync(exampleCategoriesList);
         await dbContext.SaveChangesAsync(CancellationToken.None);
@@ -313,10 +315,5 @@ public class CategoryRepositoryTest : IDisposable
             outputItem.IsActive.Should().Be(expectedItem.IsActive);
             outputItem.CreatedAt.Should().Be(expectedItem.CreatedAt);
         }
-    }
-
-    public void Dispose()
-    {
-        _fixture.CleanMemoryDatabase();
     }
 }
