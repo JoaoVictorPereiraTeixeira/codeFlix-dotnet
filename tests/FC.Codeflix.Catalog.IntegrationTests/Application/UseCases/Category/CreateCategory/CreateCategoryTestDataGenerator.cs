@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 
-namespace FC.Codeflix.Catalog.UnitTests.Application.Category.CreateCategory;
+namespace FC.Codeflix.Catalog.IntegrationTests.Application.UseCases.Category.CreateCategory;
+
 public class CreateCategoryTestDataGenerator
 {
     public static IEnumerable<object[]> GetInvalidInputs(int times = 12)

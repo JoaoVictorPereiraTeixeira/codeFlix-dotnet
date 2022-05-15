@@ -106,7 +106,7 @@ public class CreateCategoryTest
         output.CreatedAt.Should().NotBeSameDateAs(default);
     }
 
-    [Fact(DisplayName = nameof(CreateCategoryWithOnlyName))]
+    [Fact(DisplayName = nameof(CreateCategoryWithOnlyNameAndDescription))]
     [Trait("Application", "CreateCategory - Use Cases")]
     public async void CreateCategoryWithOnlyNameAndDescription()
     {
