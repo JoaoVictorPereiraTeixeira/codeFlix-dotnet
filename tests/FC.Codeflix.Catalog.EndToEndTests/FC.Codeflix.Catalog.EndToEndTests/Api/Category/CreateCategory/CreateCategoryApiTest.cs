@@ -16,7 +16,7 @@ public class CreateCategoryApiTest
         _fixture = fixture;
     }
 
-    [Fact(DisplayName = "")]
+    [Fact(DisplayName = nameof(CreateCategory))]
     [Trait("EndToEnd/API", "Category Endpoints")]
     public async Task CreateCategory()
     {

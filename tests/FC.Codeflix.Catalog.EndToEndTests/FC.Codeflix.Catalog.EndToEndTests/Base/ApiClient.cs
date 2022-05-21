@@ -8,14 +8,18 @@ public class ApiClient
 
     public ApiClient(HttpClient httpClient) => _httpClient = httpClient;
 
-    public async Task<(HttpResponseMessage?, TOutput?)> Post<TOutput>(string route, object payload)
+    public async Task<(HttpResponseMessage?, TOutput?)> Post<TOutput>(string route, object payload) where TOutput : class
     {
         var response = await _httpClient.PostAsync(route, new StringContent(JsonSerializer.Serialize(payload),Encoding.UTF8, "application/json"));
         var outputString = await response.Content.ReadAsStringAsync();
-        var output = JsonSerializer.Deserialize<TOutput>(outputString, new JsonSerializerOptions
+        TOutput? output = null;
+        if (!string.IsNullOrWhiteSpace(outputString))
         {
-            PropertyNameCaseInsensitive = true,
-        });
+            output = JsonSerializer.Deserialize<TOutput>(outputString, new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true,
+            });
+        }
 
         return (response, output);
     }
