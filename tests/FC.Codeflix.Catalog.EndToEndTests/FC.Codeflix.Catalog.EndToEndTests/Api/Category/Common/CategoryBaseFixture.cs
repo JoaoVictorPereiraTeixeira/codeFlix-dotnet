@@ -1,4 +1,5 @@
 ﻿using FC.Codeflix.Catalog.EndToEndTests.Base;
+using DomainEntity = FC.Codeflix.Catalog.Domain.Entity;
 
 namespace FC.Codeflix.Catalog.EndToEndTests.Api.Category.Common;
 public class CategoryBaseFixture : BaseFixture
@@ -40,6 +41,17 @@ public class CategoryBaseFixture : BaseFixture
     
 
     public string GetInvalidTooLongDescription()
-        => Faker.Lorem.Letter(10001);        
-    
+        => Faker.Lorem.Letter(10001);
+
+    public DomainEntity.Category GetExampleCategory() 
+        => new(
+            GetValidCategoryName(), 
+            GetValidCategoryDescription(), 
+            GetRandomBoolean()
+        );
+
+    public List<DomainEntity.Category> GetExampleCategoriesList(int listLength = 15)
+        => Enumerable.Range(1, listLength).Select(_ => GetExampleCategory()).ToList();
+
+
 }
