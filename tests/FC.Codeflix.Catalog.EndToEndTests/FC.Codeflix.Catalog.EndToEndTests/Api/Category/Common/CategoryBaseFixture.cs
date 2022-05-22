@@ -27,6 +27,19 @@ public class CategoryBaseFixture : BaseFixture
         return categoryDescription;
     }
 
-    public bool GetRandomBoolean() => new Random().NextDouble() < 0.5;
+    public bool GetRandomBoolean() 
+        => new Random().NextDouble() < 0.5;
 
+
+    public string GetInvalidShortName() 
+        => Faker.Commerce.ProductName().Substring(0,2);
+    
+
+    public string GetInvalidTooLongName()
+        => Faker.Lorem.Letter(256);
+    
+
+    public string GetInvalidTooLongDescription()
+        => Faker.Lorem.Letter(10001);        
+    
 }
