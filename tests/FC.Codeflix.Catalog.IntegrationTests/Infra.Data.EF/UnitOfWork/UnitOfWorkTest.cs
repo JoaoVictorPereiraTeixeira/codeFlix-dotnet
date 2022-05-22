@@ -42,6 +42,6 @@ public class UnitOfWorkTest
 
         var task = async () => await unitOfWork.Rollback(CancellationToken.None);
 
-        task.Should().NotThrowAsync();
+        await task.Should().NotThrowAsync();
     }
 }
