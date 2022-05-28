@@ -8,10 +8,7 @@ public class UpdateCategory : IUpdateCategory
     private readonly ICategoryRepository _categoryRepository;
     private readonly IUnitOfWork _unitOfWork;
 
-    public UpdateCategory(ICategoryRepository categoryRepository, IUnitOfWork unitOfWork)
-    {
-        (_categoryRepository,_unitOfWork) = (categoryRepository, unitOfWork);
-    }
+    public UpdateCategory(ICategoryRepository categoryRepository, IUnitOfWork unitOfWork) => (_categoryRepository, _unitOfWork) = (categoryRepository, unitOfWork);
 
     public async Task<CategoryModelOutput> Handle(UpdateCategoryInput request, CancellationToken cancellationToken)
     {

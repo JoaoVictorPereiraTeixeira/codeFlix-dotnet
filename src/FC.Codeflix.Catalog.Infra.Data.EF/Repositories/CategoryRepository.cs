@@ -39,6 +39,7 @@ namespace FC.Codeflix.Catalog.Infra.Data.EF.Repositories
 
             if (!String.IsNullOrWhiteSpace(input.Search))
                 query = query.Where(x => x.Name.Contains(input.Search));
+
             var total = await query.CountAsync();
             var items = await query
                 .Skip(toSkip)
@@ -48,21 +49,17 @@ namespace FC.Codeflix.Catalog.Infra.Data.EF.Repositories
             return new(input.Page,input.PerPage, total, items);
         }
 
-        private IQueryable<Category> AddOrderToQuery(
-            IQueryable<Category> query,
-            string orderProperty,
-            SearchOrder order
-        ) => (orderProperty.ToLower(), order) switch
-        {
-            ("name", SearchOrder.Asc) => query.OrderBy(x => x.Name),
-            ("name", SearchOrder.Desc) => query.OrderByDescending(x => x.Name),
-            ("id", SearchOrder.Asc) => query.OrderBy(x => x.Id),
-            ("id", SearchOrder.Desc) => query.OrderByDescending(x => x.Id),
-            ("createdAt", SearchOrder.Asc) => query.OrderBy(x => x.CreatedAt),
-            ("createdAt", SearchOrder.Desc) => query.OrderByDescending(x => x.CreatedAt),
-            _ => query.OrderBy(x => x.Name),
-        };
-        
+        private IQueryable<Category> AddOrderToQuery(IQueryable<Category> query, string orderProperty, SearchOrder order) 
+            => (orderProperty.ToLower(), order) switch
+            {
+                ("name", SearchOrder.Asc) => query.OrderBy(x => x.Name),
+                ("name", SearchOrder.Desc) => query.OrderByDescending(x => x.Name),
+                ("id", SearchOrder.Asc) => query.OrderBy(x => x.Id),
+                ("id", SearchOrder.Desc) => query.OrderByDescending(x => x.Id),
+                ("createdAt", SearchOrder.Asc) => query.OrderBy(x => x.CreatedAt),
+                ("createdAt", SearchOrder.Desc) => query.OrderByDescending(x => x.CreatedAt),
+                _ => query.OrderBy(x => x.Name),
+            };
 
         public Task Update(Category aggregate, CancellationToken _)
             => Task.FromResult(_categories.Update(aggregate));

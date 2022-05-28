@@ -100,7 +100,6 @@ public class CreateCategoryTest
         output.CreatedAt.Should().NotBeSameDateAs(default);
     }
 
-
     [Theory(DisplayName = nameof(ThrowWhenCantInstantiateCategory))]
     [Trait("Integration/Application", "CreateCategory - Use Cases")]
     [MemberData(
